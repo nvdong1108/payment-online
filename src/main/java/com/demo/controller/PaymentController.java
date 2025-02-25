@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,22 +15,18 @@ import org.springframework.ui.Model;
 public class PaymentController {
 
 
-	@GetMapping("/signup")
-	public String signUpPage() {
-		return "signup";
-	}
 
-	@GetMapping("/login")
-	public String login() {
-		return "login";
-	}
+
+
 
 	@GetMapping("/payment")
 	public String payment() {
 		return "payment";
 	}
-	
+
+
 	@GetMapping("/checkout")
+	@PreAuthorize("hasRole('USER')")
 	public String checkout(HttpServletRequest request,Model model) {
 		return "checkout";
 	}

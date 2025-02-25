@@ -24,6 +24,13 @@ public class MemberService {
 
 	public void deleteMember(Long id) {
 		memberRepository.deleteById(id);
+
+	}
+
+
+
+	public Optional<Member> findByEmailAndPassword(String email, String password) {
+		return memberRepository.findByEmailAndPassword(email, password);
 	}
 
 	public Member updateMember(Long id, Member updatedMember) {

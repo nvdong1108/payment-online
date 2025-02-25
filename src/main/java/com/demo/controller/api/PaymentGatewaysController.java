@@ -44,8 +44,8 @@ public class PaymentGatewaysController {
 //		String public_key= "MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4";
 		String terNO = "916";
 //		String public_key= "MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw";
-		
-		String public_key= "MTE2OThfOTE2XzlwMjUwMjlzMTIwNTAy";
+
+		String public_key= "MTE2OThfOTE2XzlwMjUwMjlzMTlwNTAy";
 		
 		try {
 			String clientIP = "0:0:0:0:0:0:0:1";

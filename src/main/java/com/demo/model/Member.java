@@ -66,6 +66,4 @@ public class Member {
 		this.full_name = full_name;
 	}
 	
-	
-	
 }
