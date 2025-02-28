@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-public class PaymentGatewaysController {
+public class ApiPaymentController {
 
 	
 	private String gatewayUrl = "https://gw.paywb.co/directapi";
@@ -41,11 +40,11 @@ public class PaymentGatewaysController {
 		Map<String, String> response = new HashMap<>();
 		
 //		String terNO = "816";
-//		String public_key= "MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4";
-		String terNO = "916";
-//		String public_key= "MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw";
+//		String public_key= "MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4"; // 816 - test
+		String terNO = "917";
+		String public_key= "MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw"; // 917
 
-		String public_key= "MTE2OThfOTE2XzlwMjUwMjlzMTlwNTAy";
+//		String public_key= "MTE2OThfOTE2XzlwMjUwMjlzMTlwNTAy"; // 916
 		
 		try {
 			String clientIP = "0:0:0:0:0:0:0:1";

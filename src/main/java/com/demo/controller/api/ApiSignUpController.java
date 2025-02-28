@@ -1,8 +1,9 @@
 package com.demo.controller.api;
 
 
-import com.demo.model.Member;
-import com.demo.service.MemberService;
+import com.demo.config.PasswordUtil;
+import com.demo.entity.User;
+import com.demo.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,22 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ApiSignUpController {
 
+    //
     @Autowired
-    private MemberService memberService;
+    private UserRepository userRepository;
 
 
     @PostMapping("/signup")
-    public ResponseEntity<Member> signup(@RequestBody Map<String,Object> request) {
+    public ResponseEntity<?> signup(@RequestBody Map<String, Object> request) {
         ObjectMapper mapper = new ObjectMapper();
-        Member member = new Member();
         try {
             String json = mapper.writeValueAsString(request);
-            member = mapper.readValue(json,Member.class);
-            Member createdMember = memberService.createMember(member);
-            return ResponseEntity.ok(createdMember);
+            User user = mapper.readValue(json, User.class);
+            user.setPassword(PasswordUtil.encodePassword(user.getPassword()));
+            user = userRepository.save(user);
+            return ResponseEntity.ok(user);
         } catch (JsonProcessingException e) {
-            return ResponseEntity.badRequest().body(member);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

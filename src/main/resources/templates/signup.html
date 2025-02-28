@@ -13,23 +13,27 @@
     <h3 class="text-center mb-3">Sign Up</h3>
 
     <form id="signupForm">
+
+        <div class="mb-3">
+            <label for="username" class="form-label">User Name</label>
+            <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+        </div>
+
         <div class="mb-3">
             <label for="fullName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" value="test name 1"
-                   required>
+            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" value="test name 1" required>
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email" value="abc@gmail.com"
-                   required>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" value="abc@gmail.com" required>
             <div class="invalid-feedback">Please enter a valid email.</div>
         </div>
 
         <div class="mb-3">
             <label for="phone" class="form-label">Phone Number</label>
             <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" pattern="[0-9]{10}"
-                   value="0989333" required>
+                   value="0989789789" required>
             <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
         </div>
 
@@ -66,7 +70,8 @@
 <script>
     document.getElementById("signupForm").addEventListener("submit", function (event) {
         event.preventDefault();
-        let full_name = document.getElementById("fullName");
+        let username = document.getElementById("username");
+        let fullname = document.getElementById("fullName");
         let email = document.getElementById("email");
         let phone = document.getElementById("phone");
         let password = document.getElementById("password");
@@ -103,13 +108,14 @@
         }
 
         let requestData = {
-            full_name: full_name.value,
+            username:username.value,
+            password: password.value,
+            fullname: fullname.value,
             email: email.value,
-            phone: phone.value,
-            password: password.value
+            phone: phone.value
         };
 
-        debugger
+
         $.ajax({
             url: "/api/signup",
             type: "POST",

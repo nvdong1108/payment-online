@@ -11,7 +11,6 @@ document
                 email: email,
                 password: password
             };
-
             $.ajax({
                 url: "/api/login",
                 type: "POST",
@@ -21,8 +20,10 @@ document
                 timeout: 30000,
                 async: true,
                 success: function (data) {
-                    window.location.href = "/dashboard";
-                    // alert("login success 123");
+
+                    localStorage.setItem("jwtToken",data.token)
+
+                    window.location.href = "/api/dashboard";
                 },
                 error: function (xhr, textStatus,
                                  errorThrown) {
@@ -30,8 +31,6 @@ document
                 },
                 complete: function () {
                     console.log("Request completed");
-                    // document.getElementById("loadingSpinner").style.display = "none";
-                    // $(".btn-dark").prop("disabled",false);
                 }
             });
         });

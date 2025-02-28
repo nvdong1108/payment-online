@@ -1,16 +1,19 @@
-package com.demo.controller;
-
+package com.demo.controller.api;
 
 import com.demo.config.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class DashboardController {
+@RestController
+@RequestMapping("/api")
+public class ApiDashboardController {
+
+
 
 //    @GetMapping("/dashboard")
 //    public String dashboard(@RequestHeader(value = "Authorization", required = false) String token,
@@ -30,8 +33,4 @@ public class DashboardController {
 //        return "dashboard";
 //    }
 
-    @GetMapping("/dashboard")
-    public String dashboard(@RequestHeader(value = "Authorization", required = false) String token) {
-        return "dashboard";
-    }
 }

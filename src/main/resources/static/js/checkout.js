@@ -34,7 +34,6 @@ document
                 ccvv : ccvv,
                 bill_amt : bill_amt
             };
-            debugger
             $
                 .ajax({
                     url : "/api/payment/checkout",
