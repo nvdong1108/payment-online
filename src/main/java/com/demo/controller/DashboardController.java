@@ -5,19 +5,24 @@ import com.demo.common.DateUtil;
 import com.demo.config.JwtUtil;
 import com.demo.dto.DepositDetailDto;
 import com.demo.entity.Deposits;
+import com.demo.entity.Transactions;
 import com.demo.repository.DepositsRepository;
+import com.demo.repository.TransactionsRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.pulsar.PulsarProperties.Transaction;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +43,10 @@ public class DashboardController {
     @Autowired
     private DepositsRepository depositsRepository;
 
+
+    @Autowired
+    private TransactionsRepository transactionsRepository;
+
   
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
@@ -51,11 +60,28 @@ public class DashboardController {
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
 
-        // List<Deposits> listDeposits = depositsRepository.findByCreatedTimeBetween(dFrom, dTo);
-        List<Deposits> deposits = depositsRepository.findAll();
+        List<Transactions> listTransactions = transactionsRepository.findByTdateBetween(dFrom, dTo);
+        List<Deposits> deposits = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        for (Transactions transactions : listTransactions) {
+            Deposits deposit = new Deposits();
+            deposit.setAmount(transactions.getBillAmt());
+            deposit.setCurrency(transactions.getBillCurrency());
+            deposit.setUsername(transactions.getDescriptor());
+            deposit.setStatus(transactions.getStatus());
+            deposit.setCreatedTime(transactions.getTdate());
+            String jsonInfo = transactions.getInfo();
+            try {
+                Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
+                String fullName = (String) map.get("fullName");
+                deposit.setUsername(fullName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            deposits.add(deposit);
+        }
+         
         model.addAttribute("deposits", deposits);
-
-
         return "dashboard";
     }
 
