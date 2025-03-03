@@ -8,14 +8,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @RestController
 @RequestMapping("/api/payment")
 public class PaymentWebhookController {
 
 	@PostMapping("/webhook")
 	public ResponseEntity<String> handleWebhook(@RequestBody Map<String, Object> payload) {
-		System.out.println("Received Webhook Data: " + payload);
-
+		log.info("Received Webhook Data: " + payload);	
 		//
 		String orderId = (String) payload.get("reference");
 		String status = (String) payload.get("status");

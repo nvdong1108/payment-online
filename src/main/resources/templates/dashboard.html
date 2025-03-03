@@ -29,12 +29,49 @@
     <div class="tab-content mt-3" id="dashboardTabsContent" sec:authorize="hasRole('ADMIN')">
         <div class="tab-pane fade show active" id="deposits" role="tabpanel">
             <div class="card">
-                <div class="card-body text-center">
-                    Deposit information will be displayed here.
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="fromDate">From Date:</label>
+                            <input type="date" id="fromDate" class="form-control"
+                            th:value="${fromDate}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="toDate">To Date:</label>
+                            <input type="date" id="toDate" class="form-control"
+                            th:value="${toDate}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select id="timeRange" class="form-select">
+                                <option value="1D" th:selected="true">Today</option>
+                                <option value="1W">1 Week</option>
+                                <option value="3M">3 Months</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" id="searchButton">Search</button>
+                        </div>
+                    </div>
+
+                    <ul class="list-group">
+                        <li  class="list-group-item d-flex justify-content-between align-items-center" th:each="deposit : ${deposits}" >
+                            <div>
+                                <strong th:text="${deposit.username}">John Doe</strong><br>
+                                <small th:text="${deposit.amount +' '+ deposit.currency.toUpperCase() + ' - ' + deposit.createdTime}">$500 - 2024-02-25</small>
+                            </div>
+                            <button class="btn btn-info btn-sm view-details" data-bs-toggle="modal"
+                                    th:data-id="${deposit.id}"
+                                    data-bs-target="#transactionDetailModal">Details
+                            </button>
+                        </li>
+                        
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="transactions" role="tabpanel">
+        <!-- <div class="tab-pane fade" id="transactions" role="tabpanel">
             <div class="card">
                 <div class="card-body">
                     <ul class="list-group">
@@ -59,7 +96,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -73,10 +110,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Sender:</strong> John Doe</p>
-                <p><strong>Amount:</strong> $500</p>
-                <p><strong>Date:</strong> 2024-02-25</p>
-                <p><strong>Note:</strong> Payment for services</p>
+                <p><strong>Sender:</strong> <span id="modalSender"></span></p>
+                <p><strong>Amount:</strong> <span id="modalAmount"></span></p>
+                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+                <p><strong>Note:</strong> <span id="modalNote"></span></p>
             </div>
         </div>
     </div>
@@ -91,26 +128,47 @@
 <script>
     $(document).ready(function () {
 
-        var token = localStorage.getItem("jwtToken");
-        if (!token) {
-            window.location.href = "/login";
-        } else {
+
+        $('#timeRange').change(function() {
+            var timeRange = $(this).val();
+            switch (timeRange) {
+                case '1D':
+                    $('#startDate').val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
+                    $('#endDate').val(moment().format('YYYY-MM-DD'));
+                    break;
+                case '1W':
+                    $('#startDate').val(moment().subtract(7, 'days').format('YYYY-MM-DD'));
+                    $('#endDate').val(moment().format('YYYY-MM-DD'));
+                    break;
+                case '3M':
+                    $('#startDate').val(moment().subtract(3, 'months').format('YYYY-MM-DD'));
+                    $('#endDate').val(moment().format('YYYY-MM-DD'));
+                    break;
+            }
+        });
+          
+        $(document).on('click', '.view-details', function () {
+            var transactionId = $(this).data('id');
             $.ajax({
-                url: "/api/dashboard",
+                url: "api/dashboard/getDepositDetails/" + transactionId,
                 type: "GET",
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
+                async: true,
                 success: function (data) {
-                    console.log("Dashboard loaded successfully");
+                    $('#transactionDetailModalLabel').text("Transaction Details");
+                    $('#modalSender').text(data.username);
+                    $('#modalAmount').text(data.amount + " " + data.currency.toUpperCase());
+                    $('#modalDate').text(data.createdTime);
+                    $('#modalNote').text(data.note);
+
+                    $('#transactionDetailModal').modal('show');
                 },
-                error: function () {
-                    alert("Phiên đăng nhập hết hạn hoặc không hợp lệ.");
-                    localStorage.removeItem("jwtToken");
-                    window.location.href = "/login";
+                error: function (xhr, status, error) {
+                    alert("Hệ thống đang bận, vui lòng thử lại sau.");
+                    console.log(error);
                 }
             });
-        }
+        });
+     
     });
 </script>
 
