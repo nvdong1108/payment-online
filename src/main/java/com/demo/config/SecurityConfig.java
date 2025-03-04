@@ -54,6 +54,7 @@ public class SecurityConfig {
             "/login", "/terms", "/contact", "/privacy"
             ,"/signup","/api/signup"
             ,"/api/**"
+            ,"/blockchain/**"
             // ,"/dashboard/getDepositDetails/**"
             , "/css/**", "/js/**", "/images/**"
 
