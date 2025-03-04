@@ -53,3 +53,13 @@ body::before {
     background: rgba(255, 255, 255, 0.9);
 }
 
+
+.cus-disable {
+    background-color: #ccc;
+    color: #666;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
