@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.demo.service.EmailService;
 import com.demo.entity.Deposits;
 import com.demo.repository.DepositsRepository;
 import com.demo.service.TransactionService;
@@ -26,7 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,42 +57,6 @@ public class ApiPaymentController {
 
 		Map<String, Object> response = new HashMap<>();
 
-	
-
-
-	@Autowired
-	private EmailService emailService;	
-
-	
-	@PostMapping("/payment/sendEmail")
-	public ResponseEntity<?> sendEmail(@RequestBody Map<String, String> request) {
-
-		String to = request.get("to");	
-		String subject = request.get("subject");
-		String body = request.get("body");
-		
-		try {
-			emailService.sendEmail(to, subject, body);
-			return ResponseEntity.ok("Email sent successfully");
-		} catch (MessagingException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
-
-
-	
-	@PostMapping("/payment/checkout")
-	public ResponseEntity<?> processPayment(@RequestBody Map<String, String> request) {
-
-		Map<String, String> response = new HashMap<>();
-		
-		String terNO = "816";
-		String public_key= "MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4"; // 816 - test
-		// String terNO = "916";
-		// String public_key= "MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw"; // 917
-
-		// String public_key= "MTE2OThfOTE2XzlwMjUwMjlzMTlwNTAy"; // 916
-		
 		try {
 			String clientIP = "0:0:0:0:0:0:0:1";
 
@@ -134,11 +96,8 @@ public class ApiPaymentController {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			// TODO: handle exception
-		}finally {
-			
 		}
 
-		
 		return ResponseEntity.ok(response);
 	}
 
