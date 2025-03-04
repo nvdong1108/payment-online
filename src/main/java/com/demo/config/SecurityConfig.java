@@ -52,8 +52,10 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {
             "/login", "/terms", "/contact", "/privacy"
-            ,"/signup","/api/signup"
+            ,"/signup","/signup_success"
+            // ,"/api/signup","/api/signup/check-username","/api/signup/check-email","/api/payment/sendEmail"
             , "/css/**", "/js/**", "/images/**"
+            ,"/api/**"
 
     };
 
@@ -72,6 +74,7 @@ public class SecurityConfig {
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/dashboard", true)
+                        .failureUrl("/login?error=true")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

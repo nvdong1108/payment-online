@@ -15,22 +15,22 @@ public class ApiDashboardController {
 
 
 
-//    @GetMapping("/dashboard")
-//    public String dashboard(@RequestHeader(value = "Authorization", required = false) String token,
-//                            HttpServletRequest request,
-//                            Model model) {
-//        if (token == null || !token.startsWith("Bearer ")) {
-//            return "redirect:/login";
-//        }
-//
-//        String jwt = token.substring(7);
-//        if (!JwtUtil.validateToken(jwt)) {
-//            return "redirect:/login";
-//        }
-//
-//        String username = JwtUtil.getUsernameFromToken(jwt);
-//        model.addAttribute("username", username);
-//        return "dashboard";
-//    }
+   @GetMapping("/dashboard")
+   public String dashboard(@RequestHeader(value = "Authorization", required = false) String token,
+                           HttpServletRequest request,
+                           Model model) {
+       if (token == null || !token.startsWith("Bearer ")) {
+           return "redirect:/login";
+       }
+
+       String jwt = token.substring(7);
+       if (!JwtUtil.validateToken(jwt)) {
+           return "redirect:/login";
+       }
+
+       String username = JwtUtil.getUsernameFromToken(jwt);
+       model.addAttribute("username", username);
+       return "dashboard";
+   }
 
 }

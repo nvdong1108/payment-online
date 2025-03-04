@@ -91,26 +91,26 @@
 <script>
     $(document).ready(function () {
 
-        var token = localStorage.getItem("jwtToken");
-        if (!token) {
-            window.location.href = "/login";
-        } else {
-            $.ajax({
-                url: "/api/dashboard",
-                type: "GET",
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
-                success: function (data) {
-                    console.log("Dashboard loaded successfully");
-                },
-                error: function () {
-                    alert("Phiên đăng nhập hết hạn hoặc không hợp lệ.");
-                    localStorage.removeItem("jwtToken");
-                    window.location.href = "/login";
-                }
-            });
-        }
+     //  var token = localStorage.getItem("jwtToken");
+     //  if (!token) {
+     //      window.location.href = "/login";
+     //  } else {
+     //      $.ajax({
+     //          url: "/api/dashboard",
+     //          type: "GET",
+     //          headers: {
+     //              "Authorization": "Bearer " + token
+     //          },
+     //          success: function (data) {
+     //              console.log("Dashboard loaded successfully");
+     //          },
+     //          error: function () {
+     //              alert("Phiên đăng nhập hết hạn hoặc không hợp lệ.");
+     //              localStorage.removeItem("jwtToken");
+     //              window.location.href = "/login";
+     //          }
+     //      });
+     //  }
     });
 </script>
 

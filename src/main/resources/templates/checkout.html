@@ -14,91 +14,55 @@
 <div class="container background mt-5">
     <h2 class="text-center">Checkout</h2>
     <div class="card-body">
-        <form id="paymentForm">
-            <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text"
-                       class="form-control" id="fullname" placeholder="John Doe"
-                       value="Test Full Name" required>
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Email</label> <input type="email"
-                                                               class="form-control" id="bill_email"
-                                                               placeholder="example@email.com"
-                                                               value="001vandong@gmail.com"
-                                                               required>
-            </div>
+        <form method="post" action="https://gw.paywb.co/checkout" name="checkoutForm">
 
-            <div class="mb-3">
-                <label class="form-label">Phone Number</label> <input type="text"
-                                                                      class="form-control" id="bill_phone"
-                                                                      placeholder="+1234567890"
-                                                                      value="+84 969381222" required>
-            </div>
+            <!--Replace of 2 very important parameters * your Business Public Key and TerNO -->
+            
+            <!-- <input type="hidden" name="public_key" value="MTE2OThfOTE2XzlwMjUwMjlzMTlwNTAy" />
+            <input type="hidden" name="terNO" value="916" /> -->
 
-            <div class="mb-3">
-                <label class="form-label">Address</label> <input type="text"
-                                                                 class="form-control" id="bill_address"
-                                                                 placeholder="123 Main Street" value="36A Alpha"
-                                                                 required>
-            </div>
+            <!-- <input type="hidden" name="public_key" value="MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw" />
+            <input type="hidden" name="terNO" value="917" /> -->
+            
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">City</label> <input type="text"
-                                                                  class="form-control" id="bill_city"
-                                                                  placeholder="New York"
-                                                                  value="Jurong" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">ZIP Code</label> <input type="text"
-                                                                      class="form-control" id="bill_zip"
-                                                                      placeholder="10001"
-                                                                      value="447602" required>
-                </div>
-            </div>
+            <input type="hidden" name="public_key" value="MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4" />
+            <input type="hidden" name="terNO" value="816" />
 
-            <hr>
+            <!--default (fixed) value * default -->
+            
+            <input type="hidden" name="source_url" value="http://localhost:8090" />
+            
+            <!--product bill_amt and product name * by cart total bill_amt -->
+            
+            <input type="hidden" name="retrycount" value="5" />
+            <input type="hidden" name="bill_amt" value="10.00" />
+            <input type="hidden" name="bill_currency" value="USD" />
+            <input type="hidden" name="product_name" value="Testing Product " />
+            
+            <!--billing details of .* customer -->
+            
+            <input type="hidden" name="fullname" value="Test Full Name" />
+            <input type="hidden" name="bill_email" value="test.4331@test.com" />
+            <input type="hidden" name="bill_address" value="36A Alpha" />
+            <input type="hidden" name="bill_city" value="Jurong" />
+            <input type="hidden" name="bill_state" value="SG" />
+            <input type="hidden" name="bill_country" value="SG" />
+            <input type="hidden" name="bill_zip" value="447602" />
+            <input type="hidden" name="bill_phone" value="+65 62294466" />
+            <input type="hidden" name="reference" value="2312022823120228" />
+            <input type="hidden" name="webhook_url" value="http://localhost:8090/api/payment/webhook" />
+            <input type="hidden" name="return_url" value="http://localhost:8090/payment/return" />
+            <input type="hidden" name="checkout_url" value="http://localhost:8090/checkout" />
+            
+            <input type="submit" name="submit" value="SUBMIT" />
+                
+            <script>document.checkoutForm.submit();</script>
+            
+            </form>
 
-            <div class="mb-3">
-                <label class="form-label">Credit Card Number</label> <input
-                    type="text" class="form-control" id="ccno"
-                    placeholder="•••• •••• •••• ••••" value="5555555555554444"
-                    required>
-            </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Expiration Month</label> <input
-                        type="text" class="form-control" id="month" placeholder="01"
-                        value="01" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Expiration Year</label> <input
-                        type="text" class="form-control" id="year" placeholder="30"
-                        value="30" required>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">CVV</label> <input type="text"
-                                                                 class="form-control" id="ccvv" placeholder="123"
-                                                                 value="123"
-                                                                 required>
-                </div>
-            </div>
 
-            <hr>
-
-            <div class="mb-3">
-                <label class="form-label">Amount (USD)</label> <input
-                    type="text" class="form-control" id="bill_amt"
-                    placeholder="110.00" value="10.00" required>
-            </div>
-
-            <button type="submit" id="payButton" class="btn btn-success w-100">Pay
-                Now
-            </button>
-        </form>
         <div id="loadingSpinner" class="text-center mt-3"
              style="display: none;">
             <div class="spinner-border text-primary" role="status">

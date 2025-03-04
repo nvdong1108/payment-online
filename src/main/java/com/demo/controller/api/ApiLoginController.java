@@ -25,13 +25,6 @@ public class ApiLoginController {
     private CustomUserDetailsService  customUserDetailsService;
 
 
-    private final AuthenticationManager authenticationManager;
-
-    public ApiLoginController(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, Object> request) {
 

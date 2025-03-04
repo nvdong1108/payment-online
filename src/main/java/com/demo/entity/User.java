@@ -1,7 +1,5 @@
 package com.demo.entity;
 
-import java.time.LocalDate;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
