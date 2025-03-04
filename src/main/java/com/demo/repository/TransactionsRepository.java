@@ -14,4 +14,6 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Stri
 
     List<Transactions> findByTdateBetween(Date dFrom, Date dTo);
 
+    List<Transactions> findByTransID(String transID);
+
 }

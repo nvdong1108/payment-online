@@ -67,16 +67,22 @@ public class DashboardController {
         ObjectMapper objectMapper = new ObjectMapper();
         for (Transactions transactions : listTransactions) {
             Deposits deposit = new Deposits();
-            deposit.setAmount(transactions.getBillAmt());
-            deposit.setCurrency(transactions.getBillCurrency());
-            deposit.setUsername(transactions.getDescriptor());
-            deposit.setStatus(transactions.getStatus());
-            deposit.setCreatedTime(transactions.getTdate());
+            double amount = transactions.getBillAmt();
+            String currency = transactions.getBillCurrency();  
+            String status = transactions.getStatus();
+            Date createdTime = transactions.getTdate(); 
+            Long transId = Long.parseLong(transactions.getTransID());
+
+            deposit.setAmount(amount);
+            deposit.setCurrency(currency);
+            deposit.setStatus(status);
+            deposit.setCreatedTime(createdTime);
+            deposit.setId(transId);
             String jsonInfo = transactions.getInfo();
             try {
                 Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
-                String fullName = (String) map.get("fullName");
-                deposit.setUsername(fullName);
+                String fullName = (String) map.get("fullname");
+                deposit.setUsername(fullName==null?"":fullName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -102,18 +108,35 @@ public class DashboardController {
 
     @GetMapping("/dashboard/getDepositDetails/{id}")
     public DepositDetailDto getDepositDetails(@PathVariable Long id) {
-        Optional<Deposits> depositOptional = depositsRepository.findById(id);
-        if (!depositOptional.isPresent()) {
-            return null;
-        }
-        Deposits deposit = depositOptional.get();
+        String transId = String.valueOf(id);
+        List<Transactions> listTransactions = transactionsRepository.findByTransID(transId);
         DepositDetailDto depositDetailDto = new DepositDetailDto();
-        depositDetailDto.setAmount(deposit.getAmount() );
-        depositDetailDto.setCurrency(deposit .getCurrency());
-        depositDetailDto.setUsername(deposit.getUsername());
-        depositDetailDto.setStatus(deposit.getStatus());
-        depositDetailDto.setCreatedTime(deposit.getCreatedTime());
+        if (listTransactions!=null && !listTransactions.isEmpty()) {
+        Transactions transaction = listTransactions.get(0);  
+        ObjectMapper objectMapper = new ObjectMapper();
+        double amount = transaction.getBillAmt();
+        String currency = transaction.getBillCurrency();  
+        String status = transaction.getStatus();
+        Date createdTime = transaction.getTdate(); 
+        String jsonInfo = transaction.getInfo();
+            try {
+                Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
+                String fullName = (String) map.get("fullname");
+                depositDetailDto.setUsername(fullName==null?"":fullName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        depositDetailDto.setAmount(amount);
+        depositDetailDto.setCurrency(currency);
+        
+        depositDetailDto.setStatus(status);
+        depositDetailDto.setCreatedTime(createdTime);
         depositDetailDto.setNote("This is a note");
+        }
+
+        
+        
         return depositDetailDto;
     }
     

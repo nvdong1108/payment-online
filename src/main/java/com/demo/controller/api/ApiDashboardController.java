@@ -3,10 +3,16 @@ package com.demo.controller.api;
 import com.demo.config.JwtUtil;
 import com.demo.dto.DepositDetailDto;
 import com.demo.entity.Deposits;
+import com.demo.entity.Transactions;
 import com.demo.repository.DepositsRepository;
+import com.demo.repository.TransactionsRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +32,40 @@ public class ApiDashboardController {
     @Autowired
     private DepositsRepository depositsRepository;
 
+    @Autowired
+    private TransactionsRepository transactionsRepository;
+
     @GetMapping("/dashboard/getDepositDetails/{id}")
     public DepositDetailDto getDepositDetails(@PathVariable Long id) {
-        Optional<Deposits> depositOptional = depositsRepository.findById(id);
-        if (!depositOptional.isPresent()) {
-            return null;
-        }
-        Deposits deposit = depositOptional.get();
+         String transId = String.valueOf(id);
+        List<Transactions> listTransactions = transactionsRepository.findByTransID(transId);
         DepositDetailDto depositDetailDto = new DepositDetailDto();
-        depositDetailDto.setAmount(deposit.getAmount() );
-        depositDetailDto.setCurrency(deposit .getCurrency());
-        depositDetailDto.setUsername(deposit.getUsername());
-        depositDetailDto.setStatus(deposit.getStatus());
-        depositDetailDto.setCreatedTime(deposit.getCreatedTime());
+        if (listTransactions!=null && !listTransactions.isEmpty()) {
+        Transactions transaction = listTransactions.get(0);  
+        ObjectMapper objectMapper = new ObjectMapper();
+        double amount = transaction.getBillAmt();
+        String currency = transaction.getBillCurrency();  
+        String status = transaction.getStatus();
+        Date createdTime = transaction.getTdate(); 
+        String jsonInfo = transaction.getInfo();
+            try {
+                Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
+                String fullName = (String) map.get("fullname");
+                depositDetailDto.setUsername(fullName==null?"":fullName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        depositDetailDto.setAmount(amount);
+        depositDetailDto.setCurrency(currency);
+        
+        depositDetailDto.setStatus(status);
+        depositDetailDto.setCreatedTime(createdTime);
         depositDetailDto.setNote("This is a note");
+        }
+
+        
+        
         return depositDetailDto;
     }
     
