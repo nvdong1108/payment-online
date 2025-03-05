@@ -2,6 +2,8 @@ package com.demo.entity;
 
 import java.util.Date;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
+@DynamicUpdate
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Settings {

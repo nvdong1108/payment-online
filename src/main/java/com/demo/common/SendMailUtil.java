@@ -10,14 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SendMailUtil {
-        public static void main(String[] args) {
-            SendMailUtil sendMailUtil = new SendMailUtil();
-            String content = sendMailUtil.readTemplateMail();
-            log.info(content);
-        }
 
-    public String readTemplateMail() {
-        ClassLoader classLoader = getClass().getClassLoader();
+    
+
+    public static String readTemplateMail() {
+        ClassLoader classLoader = SendMailUtil.class.getClassLoader();
+        
         File file = new File(classLoader.getResource("static/formEmail/transfer.html").getFile());
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {

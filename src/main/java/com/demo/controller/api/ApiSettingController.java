@@ -31,16 +31,16 @@ public class ApiSettingController {
     @PostMapping("/settings")
     public ResponseEntity<?> postMethodName(@RequestBody Map<String, Object> request) {
         log.info("Request: {}", request);
-        String emailSend = (String) request.get("emailSend");
-        String passwordSend = (String) request.get("passwordSend");
+        // String emailSend = (String) request.get("emailSend");
+        // String passwordSend = (String) request.get("passwordSend");
         String emailReceive = (String) request.get("emailReceive");
         String publicKey = (String) request.get("publicKey");
         String terNo = (String) request.get("terNo");
 
         Settings settings = new Settings();
         settings.setId(1L); 
-        settings.setEmailSend(emailSend);
-        settings.setPasswordSend(passwordSend);
+        // settings.setEmailSend(emailSend);
+        // settings.setPasswordSend(passwordSend);
         settings.setEmailReceive(emailReceive);
         settings.setPublicKey(publicKey);
         settings.setTerNo(terNo);

@@ -4,22 +4,32 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.common.StringUtil;
+import com.demo.entity.CustomUserDetails;
 import com.demo.entity.Deposits;
+import com.demo.entity.Settings;
+import com.demo.entity.User;
 import com.demo.repository.DepositsRepository;
+import com.demo.repository.SettingsRepository;
+import com.demo.service.EmailService;
 import com.demo.service.TransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,20 +52,35 @@ public class ApiPaymentController {
 	@Autowired
 	private DepositsRepository depositsRepository;
 
-
 	@Autowired
 	private TransactionService transactionService;
 
-	@Value("${gw.paywb.co.publicKey}")
-	String publicKey;
+	@Autowired
+	private EmailService emailService;
 
-	@Value("${gw.paywb.co.terNo}")
-	String terNo;
+
+	@Autowired
+	private SettingsRepository settingsRepository;
+
+	// @Value("${gw.paywb.co.publicKey}")
+	// String publicKey;
+
+	// @Value("${gw.paywb.co.terNo}")
+	// String terNo;
 
 	@PostMapping("/payment/checkout")
 	public ResponseEntity<?> processPayment(@RequestBody Map<String, String> request) {
 
 		Map<String, Object> response = new HashMap<>();
+		Optional<Settings> settings = settingsRepository.findById(1L);
+		String publicKey = null;
+		String terNo = null;
+
+		if (settings.isPresent()) {
+			Settings setting = settings.get();
+			publicKey = setting.getPublicKey();
+			terNo = setting.getTerNo();
+		}
 
 		try {
 			String clientIP = "0:0:0:0:0:0:0:1";
@@ -82,20 +107,37 @@ public class ApiPaymentController {
 			ObjectMapper objectMapper = new ObjectMapper();
 			response = objectMapper.readValue(jsonResponse, Map.class);
 
-			String error = (String)response.get("Error");
-			// String order_status = (String) response.get("order_status");
-
+			String error = StringUtil.converToString(response.get("Error"));
 			if (error != null && !error.isEmpty()) {
-				String message = (String)response.get("Message");
+				String message = (String) response.get("Message");
 				response.put("status", "error");
 				response.put("message", message);
+				return ResponseEntity.ok(response);
 			}
+			
+			response.put("status", "success");
 			transactionService.saveTransaction(transactionService.converToTransactions(response));
-			System.out.println("TransId:");
+			try {
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+					CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+					User user = userDetails.getUser();
+					
+					Map<String, Object> map = new HashMap<>();
+					map.put("username", user.getUsername());
+					map.put("toMail", user.getEmail());
+					map.put("amount", response.get("bill_amt"));
+					map.put("status", response.get("status"));
 
+					emailService.sendEmail(map);
+				}
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			// TODO: handle exception
+			response.put("status", "error");
+			response.put("message", "Error processing payment.");
 		}
 
 		return ResponseEntity.ok(response);

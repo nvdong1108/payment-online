@@ -5,6 +5,16 @@ document
         function() {
             event.preventDefault();
             document.getElementById("loadingSpinner").style.display = "block";
+
+            let paymentAlert = document.getElementById("paymentAlert");
+            paymentAlert.style.display = "none"; 
+            paymentAlert.innerHTML = ""; 
+            paymentAlert.className = "alert"; 
+
+            let payButton = document.getElementById("payButton");
+            payButton.disabled = true;
+
+
             let fullname = document.getElementById("fullname").value;
             let bill_email = document
                 .getElementById("bill_email").value;
@@ -44,11 +54,7 @@ document
                     timeout : 30000,
                     async : true,
                     success : function(data) {
-                        if(data.status == 'error'){
-                            alert("Payment error: "+data.message);
-                        }else {
-                            alert("Payment success "+data.response);
-                        }
+                        showPaymentResult(data.status !== 'error', data.message);
                     },
                     error : function(xhr, textStatus,
                                      errorThrown) {
@@ -58,10 +64,52 @@ document
                         popup.close();
                     },
                     complete : function() {
-                        document
-                            .getElementById("loadingSpinner").style.display = "none";
-
+                        payButton.disabled = false;
+                        document.getElementById("loadingSpinner").style.display = "none";
                     }
                 });
 
         });
+
+        
+function showPaymentResult(success, message) {
+    const alertBox = document.getElementById("paymentAlert");
+    
+    if (success) {
+
+        alertBox.className = "alert alert-success";
+        alertBox.innerHTML = "Payment success!";
+        resetForm();
+    } else {
+        alertBox.className = "alert alert-danger";
+        alertBox.innerHTML = "Payment failed: " + message;
+    }
+    
+    alertBox.style.display = "block";
+}
+
+
+function resetForm() {
+    document.getElementById("ccno").value = "";
+    document.getElementById("month").value = "";
+    document.getElementById("year").value = "";
+    document.getElementById("ccvv").value = "";
+    document.getElementById("bill_amt").value = "";
+}
+
+
+function formatCreditCard(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 16) {
+        value = value.substring(0, 16);
+    }
+    let formattedValue = value.replace(/(\d{4})/g, '$1 ').trim();
+    input.value = formattedValue;
+}
+
+function inputNumber(input) {
+    input.value = input.value.replace(/\D/g, "");
+
+}
+
+        
