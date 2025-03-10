@@ -1,5 +1,6 @@
 package com.demo.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -36,7 +37,9 @@ public class Transactions {
 
     String descriptor;
 
-    Date tdate;
+    @Column(name = "tdate", columnDefinition = "TIMESTAMP")
+    LocalDateTime tdate;
+    
 
     @Column(name = "bill_currency")
     String billCurrency;
@@ -59,5 +62,8 @@ public class Transactions {
 
     @Column(columnDefinition = "LONGTEXT" )
     String info;
+
+    String username;
+
 
 }

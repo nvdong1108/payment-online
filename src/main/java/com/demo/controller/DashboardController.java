@@ -23,6 +23,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.pulsar.PulsarProperties.Transaction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,47 +51,62 @@ public class DashboardController {
     @Autowired
     private TransactionsRepository transactionsRepository;
 
+
+    private final int PAGE_SIZE = 6 ; 
+
   
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(
+                            @RequestParam(required = false) String fromDate,
+                            @RequestParam(required = false) String toDate,   
+                            @RequestParam(defaultValue = "0") int page,
+                            Model model) {
 
-        Date dFrom = DateUtil.getFromCurrenDate();
-        Date dTo = DateUtil.getToCurrenDate();
+        // Page<Deposits> depositPage = depositService.getDeposits(page, size);     
 
-        String fromDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String toDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        // Date dFrom = DateUtil.getFromCurrenDate(-7);
+        // Date dTo = DateUtil.getToCurrenDate();
 
-        model.addAttribute("fromDate", fromDate);
-        model.addAttribute("toDate", toDate);
+        // fromDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        // toDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        List<Transactions> listTransactions = transactionsRepository.findByTdateBetween(dFrom, dTo);
-        List<Deposits> deposits = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        for (Transactions transactions : listTransactions) {
-            Deposits deposit = new Deposits();
-            double amount = transactions.getBillAmt();
-            String currency = transactions.getBillCurrency();  
-            String status = transactions.getStatus();
-            Date createdTime = transactions.getTdate(); 
-            Long transId = Long.parseLong(transactions.getTransID());
+       
+        
+        // Page<Transactions> listTransactions = transactionsRepository.findByTdateBetween(dFrom, dTo , PageRequest.of(page, PAGE_SIZE));
 
-            deposit.setAmount(amount);
-            deposit.setCurrency(currency);
-            deposit.setStatus(status);
-            deposit.setCreatedTime(createdTime);
-            deposit.setId(transId);
-            String jsonInfo = transactions.getInfo();
-            try {
-                Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
-                String fullName = (String) map.get("fullname");
-                deposit.setUsername(fullName==null?"":fullName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            deposits.add(deposit);
-        }
+        // model.addAttribute("fromDate", fromDate);
+        // model.addAttribute("toDate", toDate);
+        // model.addAttribute("transactions", listTransactions.getContent());
+        // model.addAttribute("currentPage", page);
+        // model.addAttribute("totalPages", listTransactions.getTotalPages());
+
+        // List<Deposits> deposits = new ArrayList<>();
+        // ObjectMapper objectMapper = new ObjectMapper();
+        // for (Transactions transactions : listTransactions) {
+        //     Deposits deposit = new Deposits();
+        //     double amount = transactions.getBillAmt();
+        //     String currency = transactions.getBillCurrency();  
+        //     String status = transactions.getStatus();
+        //     Date createdTime = transactions.getTdate(); 
+        //     Long transId = Long.parseLong(transactions.getTransID());
+
+        //     deposit.setAmount(amount);
+        //     deposit.setCurrency(currency);
+        //     deposit.setStatus(status);
+        //     deposit.setCreatedTime(createdTime);
+        //     deposit.setId(transId);
+        //     String jsonInfo = transactions.getInfo();
+        //     try {
+        //         Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);
+        //         String fullName = (String) map.get("fullname");
+        //         deposit.setUsername(fullName==null?"":fullName);
+        //     } catch (Exception e) {
+        //         e.printStackTrace();
+        //     }
+        //     deposits.add(deposit);
+        // }
          
-        model.addAttribute("deposits", deposits);
+        // model.addAttribute("deposits", deposits);
         return "dashboard";
     }
 
@@ -117,7 +134,7 @@ public class DashboardController {
         double amount = transaction.getBillAmt();
         String currency = transaction.getBillCurrency();  
         String status = transaction.getStatus();
-        Date createdTime = transaction.getTdate(); 
+        Date createdTime = new Date();// transaction.getTdate(); 
         String jsonInfo = transaction.getInfo();
             try {
                 Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);

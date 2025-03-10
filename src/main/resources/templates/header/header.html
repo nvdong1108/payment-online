@@ -11,9 +11,10 @@
 <body>
 
 <th:block th:fragment="navbar">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg mx-auto navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">PayNetwork</a>
+           <a class="navbar-brand" href="#">PayNetwork</a>
+            
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -27,10 +28,13 @@
                         <a class="nav-link" href="/signup">SignUp</a>
                     </li>
 
-                    <li class="nav-item" sec:authorize="hasAnyRole('USER', 'ADMIN')">
+                    <li class="nav-item" sec:authorize="hasAnyRole('USER')">
                         <a class="nav-link active" href="/checkout">Checkout</a>
                     </li>
-                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <li class="nav-item" sec:authorize="hasAnyRole('USER')">
+                        <a class="nav-link active" href="/customer/transactions">Transactions</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ADMIN')">
                         <a class="nav-link active" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAnyRole('ADMIN')">

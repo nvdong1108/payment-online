@@ -4,8 +4,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-    public static Date getFromCurrenDate() {
+    public static Date getFromCurrenDate(int interval) {
         Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, interval);
+        
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);

@@ -2,9 +2,12 @@ package com.demo.repository;
 
 import com.demo.entity.Transactions;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +15,8 @@ import org.springframework.stereotype.Repository;
 public interface TransactionsRepository extends JpaRepository<Transactions, String> {
 
 
-    List<Transactions> findByTdateBetween(Date dFrom, Date dTo);
+    Page<Transactions> findByTdateBetween(LocalDateTime dFrom, LocalDateTime dTo,Pageable pageable);
 
-    List<Transactions> findByTransID(String transID);
+    List<Transactions> findByTransID(String transID );
 
 }

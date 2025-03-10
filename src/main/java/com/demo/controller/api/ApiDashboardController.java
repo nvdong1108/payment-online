@@ -46,7 +46,7 @@ public class ApiDashboardController {
         double amount = transaction.getBillAmt();
         String currency = transaction.getBillCurrency();  
         String status = transaction.getStatus();
-        Date createdTime = transaction.getTdate(); 
+        Date createdTime = new Date();// transaction.getTdate(); 
         String jsonInfo = transaction.getInfo();
             try {
                 Map<String, Object> map = objectMapper.readValue(jsonInfo, Map.class);

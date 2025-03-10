@@ -15,60 +15,33 @@
 
 <body>
     <th:block th:replace="~{header/header.html :: navbar}"></th:block>
-    <div class="container mt-4">
-        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation" sec:authorize="hasRole('ADMIN')">
-                <button class="nav-link" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers"
-                    type="button" role="tab">Customers
-                </button>
-            </li>
-            <li class="nav-item" role="presentation" sec:authorize="hasRole('ADMIN')">
-                <button class="nav-link active" id="deposits-tab" data-bs-toggle="tab" data-bs-target="#deposits"
-                    type="button" role="tab">Deposits Record
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions"
-                    type="button" role="tab">Transactions
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content mt-3" id="dashboardTabsContent" sec:authorize="hasRole('ADMIN')">
-
-            <div class="tab-pane fade " id="customers" role="tabpanel">
-
-
-
-            </div>
-
-            <div class="tab-pane fade show active" id="deposits" role="tabpanel">
+    <div class="container">
+        <!-- <div class="tab-content mt-3" id="dashboardTabsContent">
+            <div class="tab-pane fade show active" id="deposits" role="tabpanel"> -->
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
+                        <div class="row d-flex align-items-end justify-content-center">
+                            <div class="col-md-3 mt-2 mt-md-0">
                                 <label for="fromDate">From Date:</label>
                                 <input type="date" id="fromDate" class="form-control" th:value="${fromDate}">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3 mt-2 mt-md-0">
                                 <label for="toDate">To Date:</label>
                                 <input type="date" id="toDate" class="form-control" th:value="${toDate}">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3 mt-3 mt-md-0">
                                 <select id="timeRange" class="form-select">
                                     <option value="1D" th:selected="true">Today</option>
                                     <option value="1W">1 Week</option>
                                     <option value="3M">3 Months</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                        </div>
+                        <div class="row">
+                            <div class="mx-auto m-3 d-flex justify-content-center" >
                                 <button class="btn btn-primary" id="searchButton">Search</button>
                             </div>
                         </div>
-
-                        
-
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 th:each="deposit : ${transactions}">
@@ -85,51 +58,25 @@
                             <ul class="pagination">
                                 <li class="page-item" th:if="${currentPage > 0}">
                                     <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage - 1})}">Previous</a>
+                                        th:href="@{/customer/transactions(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage - 1})}">Previous</a>
                                 </li>
                                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                                     th:classappend="${i == currentPage} ? 'active'">
                                     <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${i})}"
+                                        th:href="@{/customer/transactions(fromDate=${fromDate}, toDate=${toDate}, page=${i})}"
                                         th:text="${i + 1}"></a>
                                 </li>
 
                                 <li class="page-item" th:if="${currentPage + 1 < totalPages}">
                                     <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage + 1}}">Next</a>
+                                        th:href="@{/customer/transactions(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage + 1}}">Next</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="transactions" role="tabpanel">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>John Doe</strong><br>
-                                    <small>$500 - 2024-02-25</small>
-                                </div>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#transactionDetailModal">Details
-                                </button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>Jane Smith</strong><br>
-                                    <small>$300 - 2024-02-24</small>
-                                </div>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#transactionDetailModal">Details
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <!-- </div>
+        </div> -->
     </div>
 
     <!-- Modal for Transaction Details -->

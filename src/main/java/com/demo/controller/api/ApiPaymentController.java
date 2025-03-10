@@ -26,6 +26,7 @@ import com.demo.common.StringUtil;
 import com.demo.entity.CustomUserDetails;
 import com.demo.entity.Deposits;
 import com.demo.entity.Settings;
+import com.demo.entity.Transactions;
 import com.demo.entity.User;
 import com.demo.repository.DepositsRepository;
 import com.demo.repository.SettingsRepository;
@@ -75,7 +76,12 @@ public class ApiPaymentController {
 		Optional<Settings> settings = settingsRepository.findById(1L);
 		String publicKey = null;
 		String terNo = null;
-
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		User user =  null;
+		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
+			CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+			user = userDetails.getUser();
+		}
 		if (settings.isPresent()) {
 			Settings setting = settings.get();
 			publicKey = setting.getPublicKey();
@@ -116,21 +122,17 @@ public class ApiPaymentController {
 			}
 			
 			response.put("status", "success");
-			transactionService.saveTransaction(transactionService.converToTransactions(response));
+			Transactions transaction = transactionService.converToTransactions(response);
+			transaction.setUsername(user.getUsername());
+			
+			transactionService.saveTransaction(transaction);
 			try {
-				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-				if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
-					CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-					User user = userDetails.getUser();
-					
-					Map<String, Object> map = new HashMap<>();
-					map.put("username", user.getUsername());
-					map.put("toMail", user.getEmail());
-					map.put("amount", response.get("bill_amt"));
-					map.put("status", response.get("status"));
-
-					emailService.sendEmail(map);
-				}
+				Map<String, Object> map = new HashMap<>();
+				map.put("username", user.getUsername());
+				map.put("toMail", user.getEmail());
+				map.put("amount", response.get("bill_amt"));
+				map.put("status", response.get("status"));
+				emailService.sendEmail(map);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 			}

@@ -13,7 +13,7 @@ footer {
 
 
 body {
-    background-image: url('/images/background.png');
+    /* background-image: url('/images/background.png'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -32,6 +32,14 @@ body::before {
     z-index: -1;
 }
 
+.navbar .navbar-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+
 .container {
     /*background: rgba(255, 255, 255, 0.95);*/
     padding: 20px;
@@ -44,8 +52,8 @@ body::before {
 }
 
 .card {
-    width: 100%;
-    max-width: 400px;
+    /* width: 100%;
+    max-width: 400px; */
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
 }
