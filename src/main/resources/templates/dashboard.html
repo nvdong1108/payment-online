@@ -15,142 +15,76 @@
 
 <body>
     <th:block th:replace="~{header/header.html :: navbar}"></th:block>
-    <div class="container mt-4">
-        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-            <li class="nav-item" role="presentation" sec:authorize="hasRole('ADMIN')">
-                <button class="nav-link" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers"
-                    type="button" role="tab">Customers
-                </button>
-            </li>
-            <li class="nav-item" role="presentation" sec:authorize="hasRole('ADMIN')">
-                <button class="nav-link active" id="deposits-tab" data-bs-toggle="tab" data-bs-target="#deposits"
-                    type="button" role="tab">Deposits Record
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions"
-                    type="button" role="tab">Transactions
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content mt-3" id="dashboardTabsContent" sec:authorize="hasRole('ADMIN')">
+    <form th:action="@{/dashboard}" method="get">
 
-            <div class="tab-pane fade " id="customers" role="tabpanel">
+        <input type="hidden" name="tab" id="tab" th:value="${tab}" />
 
+        <div class="container mt-4">
+            <th:block th:replace="~{layout/transactions.html :: search(tab='transactions')}"></th:block>
+            <hr>
+            <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" th:classappend="${tab == 'customers' ? 'active' : ''}" id="customers-tab"
+                        data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab">Customers
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" th:classappend="${tab == 'deposits' ? 'active' : ''}" id="deposits-tab"
+                        data-bs-toggle="tab" data-bs-target="#deposits" type="button" role="tab">Deposits Record
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" th:classappend="${tab == 'transactions' ? 'active' : ''}"
+                        id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions" type="button"
+                        role="tab">Transactions
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="dashboardTabsContent" sec:authorize="hasRole('ADMIN')">
 
+                <div class="tab-pane fade" th:classappend="${tab == 'customers' ? 'show active' : ''}" id="customers"
+                    role="tabpanel">
+                    <th:block th:replace="~{layout/transactions.html :: customers}"></th:block>
+                </div>
 
-            </div>
-
-            <div class="tab-pane fade show active" id="deposits" role="tabpanel">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
+                <div class="tab-pane fade" th:classappend="${tab == 'deposits' ? 'show active' : ''}" id="deposits"
+                    role="tabpanel">
+                    <div class="container mt-4" th:if="${transactionCount > 0}">
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="fromDate">From Date:</label>
-                                <input type="date" id="fromDate" class="form-control" th:value="${fromDate}">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="toDate">To Date:</label>
-                                <input type="date" id="toDate" class="form-control" th:value="${toDate}">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <select id="timeRange" class="form-select">
-                                    <option value="1D" th:selected="true">Today</option>
-                                    <option value="1W">1 Week</option>
-                                    <option value="3M">3 Months</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="btn btn-primary" id="searchButton">Search</button>
-                            </div>
-                        </div>
-
-                        
-
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center"
-                                th:each="deposit : ${transactions}">
-                                <div>
-                                    <strong th:text="${deposit.username}">John Doe</strong><br>
-                                    <small th:text="${deposit.billAmt +' '+ deposit.billCurrency.toUpperCase() + ' - ' + deposit.tdate}">$500 - 2024-02-25</small>
+                                <div class="card shadow-sm">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Deposits Total</h5>
+                                        <p class="card-text text-primary fs-4 fw-bold" id="totalBillAmt"
+                                            th:text="'$'+${totalBillAmt}">$0</p>
+                                    </div>
                                 </div>
-                                <button class="btn btn-info btn-sm view-details" data-bs-toggle="modal"
-                                    th:data-id="${deposit.transID}" data-bs-target="#transactionDetailModal">Details
-                                </button>
-                            </li>
-                        </ul>
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li class="page-item" th:if="${currentPage > 0}">
-                                    <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage - 1})}">Previous</a>
-                                </li>
-                                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                    th:classappend="${i == currentPage} ? 'active'">
-                                    <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${i})}"
-                                        th:text="${i + 1}"></a>
-                                </li>
-
-                                <li class="page-item" th:if="${currentPage + 1 < totalPages}">
-                                    <a class="page-link"
-                                        th:href="@{/dashboard(fromDate=${fromDate}, toDate=${toDate}, page=${currentPage + 1}}">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card shadow-sm">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">Number of Transactions</h5>
+                                        <p class="card-text text-success fs-4 fw-bold" id="transactionCount"
+                                            th:text="${transactionCount}">0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${transactionCount == 0}">
+                        <div class="alert alert-warning" role="alert">
+                            No deposits found.
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="transactions" role="tabpanel">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>John Doe</strong><br>
-                                    <small>$500 - 2024-02-25</small>
-                                </div>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#transactionDetailModal">Details
-                                </button>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong>Jane Smith</strong><br>
-                                    <small>$300 - 2024-02-24</small>
-                                </div>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#transactionDetailModal">Details
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
+
+                <div class="tab-pane fade" th:classappend="${tab == 'transactions' ? 'show active' : ''}"
+                    id="transactions" role="tabpanel">
+                    <th:block th:replace="~{layout/transactions.html :: content}"></th:block>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal for Transaction Details -->
-    <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="transactionDetailModalLabel">Transaction Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Sender:</strong> <span id="modalSender"></span></p>
-                    <p><strong>Amount:</strong> <span id="modalAmount"></span></p>
-                    <p><strong>Date:</strong> <span id="modalDate"></span></p>
-                    <p><strong>Note:</strong> <span id="modalNote"></span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    </form>
     <!-- Footer -->
     <th:block th:replace="~{header/header.html :: footer}"></th:block>
 
@@ -160,48 +94,10 @@
     <script>
         $(document).ready(function () {
 
-
-            $('#timeRange').change(function () {
-                var timeRange = $(this).val();
-                switch (timeRange) {
-                    case '1D':
-                        $('#startDate').val(moment().subtract(1, 'days').format('YYYY-MM-DD'));
-                        $('#endDate').val(moment().format('YYYY-MM-DD'));
-                        break;
-                    case '1W':
-                        $('#startDate').val(moment().subtract(7, 'days').format('YYYY-MM-DD'));
-                        $('#endDate').val(moment().format('YYYY-MM-DD'));
-                        break;
-                    case '3M':
-                        $('#startDate').val(moment().subtract(3, 'months').format('YYYY-MM-DD'));
-                        $('#endDate').val(moment().format('YYYY-MM-DD'));
-                        break;
-                }
+            $('.nav-tabs .nav-link').on('click', function () {
+                var selectedTab = $(this).attr('id').replace('-tab', ''); 
+                $('#tab').val(selectedTab);
             });
-
-            $(document).on('click', '.view-details', function () {
-                var transactionId = $(this).data('id');
-                $.ajax({
-                    url: "api/dashboard/getDepositDetails/" + transactionId,
-                    type: "GET",
-                    async: true,
-                    success: function (data) {
-
-                        $('#transactionDetailModalLabel').text("Transaction Details");
-                        $('#modalSender').text(data.username);
-                        $('#modalAmount').text(data.amount + " " + data.currency.toUpperCase());
-                        $('#modalDate').text(data.createdTime);
-                        $('#modalNote').text(data.note);
-
-                        $('#transactionDetailModal').modal('show');
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Hệ thống đang bận, vui lòng thử lại sau.");
-                        console.log(error);
-                    }
-                });
-            });
-
         });
     </script>
 

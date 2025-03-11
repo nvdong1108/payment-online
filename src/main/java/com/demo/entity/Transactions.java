@@ -65,5 +65,7 @@ public class Transactions {
 
     String username;
 
+    String note;
+
 
 }

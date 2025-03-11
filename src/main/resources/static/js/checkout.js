@@ -31,6 +31,8 @@ document
             let ccvv = document.getElementById("ccvv").value;
             let bill_amt = document.getElementById("bill_amt").value;
 
+            let notes = document.getElementById("notes").value;
+
             let requestData = {
                 fullname : fullname,
                 bill_email : bill_email,
@@ -42,7 +44,8 @@ document
                 month : month,
                 year : year,
                 ccvv : ccvv,
-                bill_amt : bill_amt
+                bill_amt : bill_amt,
+                notes: notes
             };
             $
                 .ajax({
@@ -95,6 +98,7 @@ function resetForm() {
     document.getElementById("year").value = "";
     document.getElementById("ccvv").value = "";
     document.getElementById("bill_amt").value = "";
+    document.getElementById("notes").value = "";    
 }
 
 

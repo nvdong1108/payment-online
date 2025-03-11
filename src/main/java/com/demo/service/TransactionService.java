@@ -1,10 +1,13 @@
 package com.demo.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import com.demo.common.IntegerUtil;
@@ -29,7 +32,8 @@ public class TransactionService {
     
     public Transactions converToTransactions(Map<String, Object> map) throws Exception {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         ObjectMapper mapper = new ObjectMapper();
 
         Transactions transactions = new Transactions();
@@ -42,7 +46,7 @@ public class TransactionService {
 
         String descriptor = (String) map.get("descriptor");
         String strDate = (String) map.get("tdate");
-        Date tdate = sdf.parse(strDate);
+        LocalDateTime tdate = LocalDateTime.parse(strDate, formatter);
 
         String billCurrency = (String) map.get("bill_currency");
 

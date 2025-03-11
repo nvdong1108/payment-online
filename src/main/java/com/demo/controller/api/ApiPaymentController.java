@@ -108,6 +108,9 @@ public class ApiPaymentController {
 			request.put("integration-type", "s2s");
 			request.put("source", "Java-Spring-Curl-Direct-Payment");
 
+			String note = request.get("notes");
+
+
 			String jsonResponse = sendPostRequest(gatewayUrl, request);
 
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -124,6 +127,7 @@ public class ApiPaymentController {
 			response.put("status", "success");
 			Transactions transaction = transactionService.converToTransactions(response);
 			transaction.setUsername(user.getUsername());
+			transaction.setNote(note);
 			
 			transactionService.saveTransaction(transaction);
 			try {
@@ -173,31 +177,6 @@ public class ApiPaymentController {
 				responseBuilder.append(responseLine);
 			}
 			return responseBuilder.toString();
-		}
-	}
-
-	private void handleResponse(String jsonResponse, HttpServletResponse response) throws IOException {
-		try {
-			// Parse the JSON response using Jackson
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode jsonNode = mapper.readTree(jsonResponse);
-
-			if (jsonNode.has("authurl")) {
-				String authUrl = jsonNode.get("authurl").asText();
-				// Redirect to the auth URL
-				response.sendRedirect(authUrl);
-			} else if (jsonNode.has("error")) {
-				String error = jsonNode.get("error").asText();
-				response.getWriter().write("Error in Gateway Response: " + error);
-			} else if (jsonNode.has("order_status")) {
-				int orderStatus = jsonNode.get("order_status").asInt();
-				response.getWriter().write("Order Status: " + orderStatus);
-			} else {
-				response.getWriter().write("Unknown Response: " + jsonResponse);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.getWriter().write("Error parsing response: " + e.getMessage());
 		}
 	}
 

@@ -29,7 +29,8 @@ public class TransactionController {
     private final int PAGE_SIZE = 6;
 
     @GetMapping("/transactions")
-    public String getMethodName(@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+    public String getMethodName(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate,
             @RequestParam(defaultValue = "0") int page,
             Model model) {

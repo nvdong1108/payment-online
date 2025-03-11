@@ -1,11 +1,12 @@
 package com.demo.entity;
 
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.Getter;
 
 @Getter
 @Setter
@@ -29,5 +30,8 @@ public class User {
     String email;
 
     String phone;
+
+    @Column(name = "created_time", columnDefinition = "TIMESTAMP")
+    LocalDateTime createdTime;
 
 }

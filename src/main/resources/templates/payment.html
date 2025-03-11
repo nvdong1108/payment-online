@@ -86,13 +86,16 @@
                 let expiryYear = document.getElementById("expiryYear").value;
                 let cvv = document.getElementById("cvv").value;
                 let amount = document.getElementById("amount").value;
+                let note = document.getElementById("note").value;
+
                 let requestData = {
                     cardNumber: cardNumber,
                     cardName: cardName,
                     expiryMonth: expiryMonth,
                     expiryYear: expiryYear,
                     cvv: cvv,
-                    amount: amount
+                    amount: amount,
+                    note: note
                 };
 
                 $
