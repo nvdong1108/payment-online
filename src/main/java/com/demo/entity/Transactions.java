@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -65,7 +66,20 @@ public class Transactions {
 
     String username;
 
+    @Column(length = 1000)
     String note;
+
+    @Column(name = "work_flow")
+    String workFlow;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.workFlow == null) {
+            this.workFlow = "pending";
+        }
+    }
+
+
 
 
 }

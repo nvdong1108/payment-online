@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.demo.common.Constant;
 import com.demo.common.DateUtil;
 import com.demo.entity.Transactions;
 import com.demo.repository.TransactionsRepository;
 
 @RequestMapping("/customer")
 @Controller
-public class TransactionController {
+public class HistoryTransactionController {
 
     @Autowired
     private TransactionsRepository transactionsRepository;
@@ -36,7 +37,7 @@ public class TransactionController {
             Model model) {
 
         if (fromDate == null) {
-            fromDate = LocalDate.now().minusDays(7); 
+            fromDate = LocalDate.now().minusDays(Constant.WEEK); 
         }
         if (toDate == null) {
             toDate = LocalDate.now(); 

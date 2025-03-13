@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.demo.common.Constant;
 import com.demo.dto.DepositDetailDto;
 import com.demo.entity.Deposits;
 import com.demo.entity.Transactions;
@@ -54,7 +55,7 @@ public class DashboardController {
             tab = "deposits";
         }
         if (fromDate == null) {
-            fromDate = LocalDate.now().minusDays(30);
+            fromDate = LocalDate.now().minusDays(Constant.TODAY);
         }
         if (toDate == null) {
             toDate = LocalDate.now();

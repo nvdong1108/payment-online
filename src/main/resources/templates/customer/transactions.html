@@ -16,9 +16,14 @@
 <body>
     <th:block th:replace="~{header/header.html :: navbar}"></th:block>
     <div class="container">
+
+
+        <th:block th:replace="~{layout/transactions.html :: search}"></th:block>
+        <th:block th:replace="~{layout/transactions.html :: content}"></th:block>
+
         <!-- <div class="tab-content mt-3" id="dashboardTabsContent">
             <div class="tab-pane fade show active" id="deposits" role="tabpanel"> -->
-                <div class="card">
+                <!-- <div class="card">
                     <div class="card-body">
                         <div class="row d-flex align-items-end justify-content-center">
                             <div class="col-md-3 mt-2 mt-md-0">
@@ -28,13 +33,6 @@
                             <div class="col-md-3 mt-2 mt-md-0">
                                 <label for="toDate">To Date:</label>
                                 <input type="date" id="toDate" class="form-control" th:value="${toDate}">
-                            </div>
-                            <div class="col-md-3 mt-3 mt-md-0">
-                                <select id="timeRange" class="form-select">
-                                    <option value="1D" th:selected="true">Today</option>
-                                    <option value="1W">1 Week</option>
-                                    <option value="3M">3 Months</option>
-                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -54,7 +52,8 @@
                                 </button>
                             </li>
                         </ul>
-                        <nav aria-label="Page navigation">
+                        
+                        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
                             <ul class="pagination">
                                 <li class="page-item" th:if="${currentPage > 0}">
                                     <a class="page-link"
@@ -74,28 +73,9 @@
                             </ul>
                         </nav>
                     </div>
-                </div>
+                </div> -->
             <!-- </div>
         </div> -->
-    </div>
-
-    <!-- Modal for Transaction Details -->
-    <div class="modal fade" id="transactionDetailModal" tabindex="-1" aria-labelledby="transactionDetailModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="transactionDetailModalLabel">Transaction Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Sender:</strong> <span id="modalSender"></span></p>
-                    <p><strong>Amount:</strong> <span id="modalAmount"></span></p>
-                    <p><strong>Date:</strong> <span id="modalDate"></span></p>
-                    <p><strong>Note:</strong> <span id="modalNote"></span></p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Footer -->

@@ -46,9 +46,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiPaymentController {
 
 	private String gatewayUrl = "https://gw.paywb.co/directapi";
-	private String path_webhook = "http://localhost:8090/api/payment/webhook";
-	private String path_return = "http://localhost:8090/payment/return";
-	private String path_checkout = "http://localhost:8090/checkout";
+	private String path_webhook = "http://payworknet.biz/api/payment/webhook";
+	private String path_return = "http://payworknet.biz/payment/return";
+	private String path_checkout = "http://payworknet.biz/checkout";
 
 	@Autowired
 	private DepositsRepository depositsRepository;
@@ -63,11 +63,6 @@ public class ApiPaymentController {
 	@Autowired
 	private SettingsRepository settingsRepository;
 
-	// @Value("${gw.paywb.co.publicKey}")
-	// String publicKey;
-
-	// @Value("${gw.paywb.co.terNo}")
-	// String terNo;
 
 	@PostMapping("/payment/checkout")
 	public ResponseEntity<?> processPayment(@RequestBody Map<String, String> request) {

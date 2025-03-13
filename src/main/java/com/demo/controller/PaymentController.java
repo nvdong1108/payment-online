@@ -2,12 +2,17 @@ package com.demo.controller;
 
 import com.demo.config.JwtUtil;
 import com.demo.entity.CustomUserDetails;
+import com.demo.entity.Settings;
 import com.demo.entity.User;
+import com.demo.repository.SettingsRepository;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,11 +29,8 @@ import org.springframework.ui.Model;
 public class PaymentController {
 
 
-	@Value("${gw.paywb.co.publicKey}")
-	String publicKey;
-
-	@Value("${gw.paywb.co.terNo}")
-	String terNo;
+	@Autowired
+	private SettingsRepository settingsRepository;
 
 
 
@@ -53,6 +55,17 @@ public class PaymentController {
 	@GetMapping("/checkout")
 	public String checkout(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Optional<Settings> settings = settingsRepository.findById(1L);
+		String publicKey = null;
+		String terNo = null;
+
+		if (settings.isPresent()) {
+			Settings setting = settings.get();
+			publicKey = setting.getPublicKey();
+			terNo = setting.getTerNo();
+		}
+
 		if(authentication != null && authentication.getPrincipal() instanceof CustomUserDetails){
 			CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 			User user = userDetails.getUser();

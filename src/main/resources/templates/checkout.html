@@ -16,14 +16,14 @@
     <div class="container background mt-3">
         <h2 class="text-center">Checkout</h2>
 
-        <ul class="nav nav-tabs" id="checkoutTabs">
+        <!-- <ul class="nav nav-tabs" id="checkoutTabs">
             <li class="nav-item">
                 <a class="nav-link active" id="payment-tab" data-bs-toggle="tab" href="#payment">Payment</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="payment-s2s-tab" data-bs-toggle="tab" href="#payment-s2s">Payment (S2S)</a>
             </li>
-        </ul>
+        </ul> -->
 
 
         <div class="tab-content mt-3">
@@ -37,7 +37,7 @@
 
 
 
-            <div class="tab-pane fade show active" id="payment">
+            <!-- <div class="tab-pane fade show active" id="payment">
                 <div class="card-body">
                     <form id="paymentForm">
 
@@ -91,53 +91,64 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
 
-            <div class="tab-pane fade" id="payment-s2s">
-                <div class="card-body">
-                    <form id="paymentS2SForm" method="post" action="https://gw.paywb.co/checkout" name="checkoutForm">
+            <!-- <div class="tab-pane fade" id="payment-s2s"> -->
+            <div class="card-body">
+                <form id="paymentS2SForm" method="post" action="https://gw.paywb.co/checkout" name="checkoutForm"
+                    onsubmit="return validateForm()">
 
-                        <input type="hidden" name="public_key" th:value="${publicKey}" />
-                        <input type="hidden" name="terNO" th:value="${terNO}" />
+                    <input type="hidden" name="public_key" th:value="${publicKey}" />
+                    <input type="hidden" name="terNO" th:value="${terNO}" />
 
-                        <input type="hidden" name="source_url" value="http://localhost:8090/checkout" />
+                    <input type="hidden" name="source_url" value="http://localhost:8090/checkout" />
 
-                        <input type="hidden" name="retrycount" value="5" />
-                        <input type="hidden" name="product_name" value="Testing Product " />
-                        <input type="hidden" name="fullname" th:value="${fullname}" />
-                        <input type="hidden" name="bill_email" th:value="${email}" />
-                        <input type="hidden" name="bill_phone" th:value="${phone}" />
+                    <input type="hidden" name="retrycount" value="5" />
+                    <input type="hidden" name="product_name" value="Testing Product " />
+                    <input type="hidden" name="fullname" th:value="${fullname}" />
+                    <input type="hidden" name="bill_email" th:value="${email}" />
+                    <input type="hidden" name="bill_phone" th:value="${phone}" />
 
-                        <input type="hidden" name="bill_address" value="36A Alpha" />
-                        <input type="hidden" name="bill_city" value="Jurong" />
-                        <input type="hidden" name="bill_state" value="SG" />
-                        <input type="hidden" name="bill_country" value="SG" />
-                        <input type="hidden" name="bill_zip" value="447602" />
+                    <input type="hidden" name="bill_address" value="36A Alpha" />
+                    <input type="hidden" name="bill_city" value="Jurong" />
+                    <input type="hidden" name="bill_state" value="SG" />
+                    <input type="hidden" name="bill_country" value="SG" />
+                    <input type="hidden" name="bill_zip" value="447602" />
 
-                        <input type="hidden" name="reference" value="2312022823120228" />
-                        <input type="hidden" name="webhook_url" value="http://localhost:8090/api/payment/webhook" />
-                        <input type="hidden" name="return_url" value="http://localhost:8090/api/payment/webhook" />
-                        <input type="hidden" name="checkout_url" value="http://localhost:8090/checkout" />
+                    <input type="hidden" name="reference" value="2312022823120228" />
+                    <input type="hidden" name="webhook_url" value="http://localhost:8090/api/payment/webhook" />
+                    <input type="hidden" name="return_url" value="http://localhost:8090/api/payment/webhook" />
+                    <input type="hidden" name="checkout_url" value="http://localhost:8090/checkout" />
 
-                        <div class="row mb-3">
-                            <div class="col-12 col-md-6">
-                                <label class="form-label fw-bold">Amount</label>
-                                <input type="text" name="bill_amt" value="10.00" class="form-control" required oninput="inputNumber(this)" maxlength="11"/>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-bold me-4">Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" id="amount" class="form-control" oninput="inputNumber(this)"
+                                    maxlength="11">
                             </div>
+
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Notes</label>
-                                <textarea class="form-control" rows="4" placeholder="Enter additional notes..."></textarea>
-                            </div>
+                        <span id="amountError" style="color: red; margin-left: 10px; display: none;">Please enter a valid amount!</span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Notes</label>
+                            <textarea class="form-control" rows="4" placeholder="Enter additional notes..."></textarea>
                         </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
             </div>
+            <!-- </div> -->
         </div>
     </div>
 
@@ -150,12 +161,29 @@
     <script src="/js/checkout.js"></script>
 
     <script>
+
+        function validateForm() {
+            var amountInput = document.getElementById("amount");
+            var amount = amountInput.value.trim();
+            var amountError = document.getElementById("amountError");
+
+            if (amount === "" || isNaN(amount) || Number(amount) <= 0) {
+                amountError.style.display = "inline"; // Hiển thị cảnh báo
+                amountInput.style.border = "1px solid red"; // Đổi viền input thành màu đỏ
+                return false; // Ngăn không cho submit form
+            } else {
+                amountError.style.display = "none"; // Ẩn cảnh báo nếu hợp lệ
+                amountInput.style.border = ""; // Reset viền input
+                return true; // Cho phép submit
+            }
+        }
+
         $(document).ready(function () {
 
             $("#paymentForm").submit(function (event) {
                 event.preventDefault();
                 alert("Processing normal payment...");
-                
+
             });
 
         });

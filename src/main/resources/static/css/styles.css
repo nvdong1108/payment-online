@@ -11,6 +11,18 @@ footer {
     padding: 10px 0;
 }
 
+/* @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  } */
+
+
+  @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
 body {
     /* background-image: url('/images/background.png'); */
@@ -20,6 +32,15 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     padding-bottom: 110px;
+
+    /* background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1); */
+    /* background: linear-gradient(-45deg, #a8e6cf, #dcedc1, #dcedc1, #b6bcbe);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite; */
+    background: linear-gradient(-45deg, #e0f7fa, #fff9c4, #e0f7fa, #fff9c4);
+    /* background: linear-gradient(-45deg, #e0f7fa, #e3f2fd, #e0f7fa, #e3f2fd); */
+    background-size: 400% 400%;
+    animation: gradientAnimation 20s ease infinite;
 }
 body::before {
     content: "";

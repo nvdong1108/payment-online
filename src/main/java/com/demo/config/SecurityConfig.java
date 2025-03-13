@@ -53,7 +53,6 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "/login", "/terms", "/contact", "/privacy"
             ,"/signup","/signup_success"
-            ,"/checkout","/payment/return"
             ,"/api/**"
             ,"/blockchain/**"
             // ,"/dashboard/getDepositDetails/**"
