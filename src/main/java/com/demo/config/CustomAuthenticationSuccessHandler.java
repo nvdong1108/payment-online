@@ -7,19 +7,28 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import org.springframework.stereotype.Component;
 
+import com.demo.entity.LoginLog;
+import com.demo.repository.LoginLogRepository;
 
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 
 @Slf4j
 @Component
-public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler  {
+public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler   implements AuthenticationSuccessHandler{
+    
+     @Autowired
+    private LoginLogRepository loginLogRepository;
+    
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
@@ -39,7 +48,21 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 return "/checkout";
             }
         }
-
         return "/dashboard"; 
+    }
+
+
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        String username = authentication.getName();
+        String ipAddress = request.getRemoteAddr();
+        Date loginTime = new Date();
+        String userAgent = request.getHeader("User-Agent");
+        LoginLog loginLog = new LoginLog(username, ipAddress,loginTime, userAgent);
+        loginLogRepository.save(loginLog);
+        
+        handle(request, response, authentication);
+
     }
 }

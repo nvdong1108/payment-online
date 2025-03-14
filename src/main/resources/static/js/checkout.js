@@ -1,15 +1,16 @@
-document
-    .getElementById("payButton")
-    .addEventListener(
+let payButton = document.getElementById("payButton");
+if (payButton) {
+
+    payButton.addEventListener(
         "click",
-        function() {
+        function () {
             event.preventDefault();
             document.getElementById("loadingSpinner").style.display = "block";
 
             let paymentAlert = document.getElementById("paymentAlert");
-            paymentAlert.style.display = "none"; 
-            paymentAlert.innerHTML = ""; 
-            paymentAlert.className = "alert"; 
+            paymentAlert.style.display = "none";
+            paymentAlert.innerHTML = "";
+            paymentAlert.className = "alert";
 
             let payButton = document.getElementById("payButton");
             payButton.disabled = true;
@@ -34,50 +35,52 @@ document
             let notes = document.getElementById("notes").value;
 
             let requestData = {
-                fullname : fullname,
-                bill_email : bill_email,
-                bill_phone : bill_phone,
-                bill_address : bill_address,
-                bill_city : bill_city,
-                bill_zip : bill_zip,
-                ccno : ccno,
-                month : month,
-                year : year,
-                ccvv : ccvv,
-                bill_amt : bill_amt,
+                fullname: fullname,
+                bill_email: bill_email,
+                bill_phone: bill_phone,
+                bill_address: bill_address,
+                bill_city: bill_city,
+                bill_zip: bill_zip,
+                ccno: ccno,
+                month: month,
+                year: year,
+                ccvv: ccvv,
+                bill_amt: bill_amt,
                 notes: notes
             };
             $
                 .ajax({
-                    url : "/api/payment/checkout",
-                    type : "POST",
-                    data : JSON.stringify(requestData),
-                    contentType : "application/json; charset=utf-8",
-                    dataType : "json",
-                    timeout : 30000,
-                    async : true,
-                    success : function(data) {
+                    url: "/api/payment/checkout",
+                    type: "POST",
+                    data: JSON.stringify(requestData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    timeout: 30000,
+                    async: true,
+                    success: function (data) {
                         showPaymentResult(data.status !== 'error', data.message);
                     },
-                    error : function(xhr, textStatus,
-                                     errorThrown) {
+                    error: function (xhr, textStatus,
+                        errorThrown) {
                         alert("The server is busy. Please try again later")
                         console
                             .error("The server is busy. Please try again later");
                         popup.close();
                     },
-                    complete : function() {
+                    complete: function () {
                         payButton.disabled = false;
                         document.getElementById("loadingSpinner").style.display = "none";
                     }
                 });
 
         });
+}
 
-        
+
+
 function showPaymentResult(success, message) {
     const alertBox = document.getElementById("paymentAlert");
-    
+
     if (success) {
 
         alertBox.className = "alert alert-success";
@@ -87,7 +90,7 @@ function showPaymentResult(success, message) {
         alertBox.className = "alert alert-danger";
         alertBox.innerHTML = "Payment failed: " + message;
     }
-    
+
     alertBox.style.display = "block";
 }
 
@@ -98,7 +101,7 @@ function resetForm() {
     document.getElementById("year").value = "";
     document.getElementById("ccvv").value = "";
     document.getElementById("bill_amt").value = "";
-    document.getElementById("notes").value = "";    
+    document.getElementById("notes").value = "";
 }
 
 
@@ -116,4 +119,3 @@ function inputNumber(input) {
 
 }
 
-        

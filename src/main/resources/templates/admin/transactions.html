@@ -7,14 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 
 <body>
     <th:block th:replace="~{header/header.html :: navbar}"></th:block>
+
     <form th:action="@{/admin/transactions}" method="get">
-
-        <input type="hidden" name="tab" id="tab" th:value="${tab}" />
-
         <div class="container mt-4">
             <th:block th:replace="~{layout/transactions.html :: search}"></th:block>
             <th:block th:replace="~{layout/transactions.html :: content}"></th:block>
@@ -23,19 +22,8 @@
     <!-- Footer -->
     <th:block th:replace="~{header/header.html :: footer}"></th:block>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function () {
-
-            $('.nav-tabs .nav-link').on('click', function () {
-                var selectedTab = $(this).attr('id').replace('-tab', '');
-                $('#tab').val(selectedTab);
-            });
-        });
-    </script>
-
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 
 </body>
 

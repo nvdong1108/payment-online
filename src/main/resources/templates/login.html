@@ -8,6 +8,8 @@
     <title>Login Page</title>
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 
 
@@ -43,31 +45,65 @@
                 transform: translateY(0);
             }
         }
+
+        .paynetwork-text {
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            color: #007bff;
+            margin: 0;
+        }
+
+        .paynetwork-text small {
+            font-size: 1.3rem;
+            display: block;
+        }
+
+        .paynetwork-text span {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+        }
+
+        .logo-img {
+            width: 100px;
+            height: auto;
+            border-radius: 10px;
+        }
     </style>
 
 
     <header class="w-100 bg-dark text-light text-center py-3">
-        <h2 class="m-0">Pay Network</h2>
+        <h2 class="m-0">PayNetwork</h2>
     </header>
     <div class="d-flex justify-content-center align-items-center flex-grow-1" id="loginContainer">
         <div class="card p-4 shadow-lg" style="width: 100%; max-width: 400px;">
-            <h3 class="text-center mb-3">Login</h3>
+
+            <div class="d-flex justify-content-between align-items-center m-3">
+                <h2 class="paynetwork-text">
+                    <small>Welcome to</small>
+                    <span>Paynetwork</span>
+                </h2>
+                <img src="/images/paynetwork-logo.webp" alt="Paynetwork Logo" class="logo-img">
+            </div>
+
+
+
+            <!-- <h3 class="text-left mb-2">Login</h3> -->
 
             <div th:if="${error}" class="alert alert-danger">
                 <p>Invalid username or password!</p>
             </div>
 
             <form id="loginForm" action="/login" method="post">
-                <div class="mb-3">
-                    <label for="username" class="form-label fw-bold">User Name</label>
-                    <input type="text" class="form-control" name="username" id="username"
-                        placeholder="Enter your User Name">
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="text" id="form2Example1" name="username" class="form-control" placeholder=" ">
+                    <label class="form-label" for="form2Example1">Username</label>
                 </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label fw-bold">Password</label>
-                    <input type="password" class="form-control" name="password" id="password"
-                        placeholder="Enter your password">
+                <div data-mdb-input-init class="form-outline mb-4">
+                    <input type="password" id="form2Example2" name="password" class="form-control" placeholder=" ">
+                    <label class="form-label" for="form2Example1">Password</label>
                 </div>
 
                 <div class="d-grid">
@@ -85,13 +121,13 @@
                 If you don’t have an account, <a href="/signup" class="text-decoration-none">Sign up</a>.
             </p>
         </div>
-        <th:block th:replace="~{header/header :: footer}"></th:block>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!--<script src="/js/login.js"></script>-->
     </div>
 
+    <th:block th:replace="~{header/header :: footer}"></th:block>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
 </body>
 
 </html>
