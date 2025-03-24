@@ -4,21 +4,10 @@
 <th:block th:replace="~{header/header :: head}"></th:block>
 
 <body>
-    <!--<th:block th:replace="header/header :: content"></th:block>-->
     <th:block th:replace="~{header/header :: navbar}"></th:block>
 
     <div class="container background mt-3">
         <h2 class="text-center">Checkout</h2>
-
-        <!-- <ul class="nav nav-tabs" id="checkoutTabs">
-            <li class="nav-item">
-                <a class="nav-link active" id="payment-tab" data-bs-toggle="tab" href="#payment">Payment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="payment-s2s-tab" data-bs-toggle="tab" href="#payment-s2s">Payment (S2S)</a>
-            </li>
-        </ul> -->
-
 
         <div class="tab-content mt-3">
             <div id="loadingSpinner" class="text-center mt-3" style="display: none;">
@@ -29,93 +18,8 @@
             </div>
             <div id="paymentAlert" class="alert mt-3" style="display: none;"></div>
 
-
-
-            <!-- <div class="tab-pane fade show active" id="payment">
-                <div class="card-body">
-                    <form id="paymentForm">
-
-                        <input type="hidden" id="fullname" th:value="${fullname}" />
-                        <input type="hidden" id="bill_email" th:value="${email}" />
-                        <input type="hidden" id="bill_phone" th:value="${phone}" />
-                        <input type="hidden" id="bill_address" value="36A Alpha" />
-                        <input type="hidden" id="bill_city" value="Jurong">
-                        <input type="hidden" id="bill_zip" value="447602">
-                        <hr>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Credit Card Number</label> 
-                            <input type="text" class="form-control" id="ccno" placeholder="•••• •••• •••• ••••"
-                             maxlength="19" 
-                             oninput="formatCreditCard(this)" required>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">Expiration Month</label>
-                                <input type="text" class="form-control" id="month" placeholder="Enter two digit month"
-                                maxlength="2"  pattern="\d{2}" required oninput="inputNumber(this)">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">Expiration Year</label>
-                                <input type="text" class="form-control" id="year" placeholder="Enter two digit year" 
-                                maxlength="2" pattern="\d{2}" oninput="inputNumber(this)"
-                                required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-bold">CVV</label>
-                                <input type="text" class="form-control" id="ccvv" placeholder="Enter password card (3-4 digits)" maxlength="4" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Amount (USD)</label> 
-                            <input type="text" class="form-control" id="bill_amt" placeholder="110.00" maxlength="9" 
-                            oninput="inputNumber(this)"
-                            required>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Notes</label>
-                                <textarea class="form-control" rows="4"  id="notes" placeholder="Enter additional notes..."></textarea>
-                            </div>
-                        </div>
-                         
-                        <div class="mb-3 d-flex justify-content-center">
-                            <button type="submit" id="payButton" class="btn btn-success">Pay Now
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div> -->
-
-
-            <!-- <div class="tab-pane fade" id="payment-s2s"> -->
             <div class="card-body">
-                <form id="paymentS2SForm" method="post" action="https://gw.paywb.co/checkout" name="checkoutForm"
-                    onsubmit="return validateForm()">
-
-                    <input type="hidden" name="public_key" th:value="${publicKey}" />
-                    <input type="hidden" name="terNO" th:value="${terNO}" />
-
-                    <input type="hidden" name="source_url" value="http://localhost:8090/checkout" />
-
-                    <input type="hidden" name="retrycount" value="5" />
-                    <input type="hidden" name="product_name" value="Testing Product " />
-                    <input type="hidden" name="fullname" th:value="${fullname}" />
-                    <input type="hidden" name="bill_email" th:value="${email}" />
-                    <input type="hidden" name="bill_phone" th:value="${phone}" />
-
-                    <input type="hidden" name="bill_address" value="36A Alpha" />
-                    <input type="hidden" name="bill_city" value="Jurong" />
-                    <input type="hidden" name="bill_state" value="SG" />
-                    <input type="hidden" name="bill_country" value="SG" />
-                    <input type="hidden" name="bill_zip" value="447602" />
-
-                    <input type="hidden" name="reference" value="2312022823120228" />
-                    <input type="hidden" name="webhook_url" value="http://localhost:8090/api/payment/webhook" />
-                    <input type="hidden" name="return_url" value="http://localhost:8090/api/payment/webhook" />
-                    <input type="hidden" name="checkout_url" value="http://localhost:8090/checkout" />
-
-
+                <form id="paymentS2SForm">
                     <div class="row mb-3">
                         <div class="col-12 col-md-4">
                             <label class="form-label fw-bold me-4">Amount</label>
@@ -123,19 +27,13 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" id="amount" class="form-control" oninput="inputNumber(this)"
-                                    maxlength="11">
+                                <input type="text" id="amount" value="101" class="form-control"
+                                    oninput="inputNumber(this)" maxlength="11">
                             </div>
 
                         </div>
-                        <span id="amountError" style="color: red; margin-left: 10px; display: none;">Please enter a valid amount!</span>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label fw-bold">Notes</label>
-                            <textarea class="form-control" rows="4" placeholder="Enter additional notes..."></textarea>
-                        </div>
+                        <span id="amountError" style="color: red; margin-left: 10px; display: none;">Please enter a
+                            valid amount!</span>
                     </div>
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-success">Submit</button>
@@ -143,6 +41,9 @@
                 </form>
             </div>
             <!-- </div> -->
+
+
+
         </div>
     </div>
 
@@ -174,9 +75,28 @@
 
         $(document).ready(function () {
 
-            $("#paymentForm").submit(function (event) {
+            $("#paymentS2SForm").submit(function (event) {
                 event.preventDefault();
-                alert("Processing normal payment...");
+                // alert("Processing normal payment...");
+
+                $.ajax({
+                    url: "/api/payment-link",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "amount": $("#amount").val(),
+                        "notes": $("#notes").val()
+                    }),
+                    async: true,
+                    success: function (response) {
+                        debugger
+                        let rederectUrl = response.redirectUrl;
+                        window.location.href = rederectUrl;
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Payment failed!");
+                    }
+                });
 
             });
 

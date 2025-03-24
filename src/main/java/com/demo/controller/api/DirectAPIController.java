@@ -31,7 +31,7 @@ public class DirectAPIController {
 	
 	
 	
-// http://localhost:8090/directapi?public_key=MTE3MDBfOTE3XzIwMjUwMjIzMTUzMjUw&terNO=917&bill_currency=USD&product_name=dev testing product&fullname=Dev Full Name&bill_email=test.9900@test.com&bill_address=36A Alpha&bill_city=Jurong&bill_state=SG&bill_country=SG&bill_zip=KEN&bill_phone=6562294466&reference=23120228&mop=dc&ccno=5555555555554444&ccvv=123&month=01&year=30&bill_amt=110.00
+// http://localhost:8090/directapi?public_key=MTE2OThfOTE2XzIwMjUwMjIzMTIwNTAy&terNO=916&bill_currency=USD&product_name=dev testing product&fullname=Dev Full Name&bill_email=test.9900@test.com&bill_address=36A Alpha&bill_city=Jurong&bill_state=SG&bill_country=SG&bill_zip=KEN&bill_phone=6562294466&reference=23120228&mop=dc&ccno=5555555555554444&ccvv=123&month=01&year=30&bill_amt=110.00
 	
 	
 	// http://localhost:8090/directapi?public_key=MTEzMTFfODE2XzIwMjQxMjExMTMwNTQ4&terNO=816&bill_currency=USD&product_name=dev testing product&fullname=Dev Full Name&bill_email=test.9900@test.com&bill_address=36A Alpha&bill_city=Jurong&bill_state=SG&bill_country=SG&bill_zip=KEN&bill_phone=6562294466&reference=23120228&mop=dc&ccno=5555555555554444&ccvv=123&month=01&year=30&bill_amt=110.00

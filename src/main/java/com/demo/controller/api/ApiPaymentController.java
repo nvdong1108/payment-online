@@ -31,6 +31,7 @@ import com.demo.entity.User;
 import com.demo.repository.DepositsRepository;
 import com.demo.repository.SettingsRepository;
 import com.demo.service.EmailService;
+import com.demo.service.StripeService;
 import com.demo.service.TransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,6 +39,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RestController
@@ -59,20 +62,37 @@ public class ApiPaymentController {
 	@Autowired
 	private EmailService emailService;
 
-
 	@Autowired
 	private SettingsRepository settingsRepository;
 
+	@Autowired
+	StripeService stripeService;
+
+	@PostMapping("/payment-link")
+	public ResponseEntity<?> getMethodName(@RequestBody Map<String, String> body) {
+		try {
+			String rederectUrl = stripeService.payment();
+			Map<String, Object> response = new HashMap<>();
+			response.put("redirectUrl", rederectUrl);
+
+			return ResponseEntity.ok().body(response);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+
+	}
 
 	@PostMapping("/payment/checkout")
 	public ResponseEntity<?> processPayment(@RequestBody Map<String, String> request) {
+
+		stripeService.payment();
 
 		Map<String, Object> response = new HashMap<>();
 		Optional<Settings> settings = settingsRepository.findById(1L);
 		String publicKey = null;
 		String terNo = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user =  null;
+		User user = null;
 		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails) {
 			CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 			user = userDetails.getUser();
@@ -105,7 +125,6 @@ public class ApiPaymentController {
 
 			String note = request.get("notes");
 
-
 			String jsonResponse = sendPostRequest(gatewayUrl, request);
 
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -118,12 +137,12 @@ public class ApiPaymentController {
 				response.put("message", message);
 				return ResponseEntity.ok(response);
 			}
-			
+
 			response.put("status", "success");
 			Transactions transaction = transactionService.converToTransactions(response);
 			transaction.setUsername(user.getUsername());
 			transaction.setNote(note);
-			
+
 			transactionService.saveTransaction(transaction);
 			try {
 				Map<String, Object> map = new HashMap<>();
