@@ -38,8 +38,6 @@ public class StripeService {
 
             Product pdt = products.getData().get(0);
 
-
-
             PriceSearchParams paramsPriceSearchParams = PriceSearchParams.builder()
                     .setQuery("active:'true' AND product:'" + pdt.getId() + "'")
                     .build();

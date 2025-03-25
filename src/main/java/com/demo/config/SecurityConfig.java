@@ -27,13 +27,9 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    // public SecurityConfig(CustomUserDetailsService userDetailsService) {
-    // this.userDetailsService = userDetailsService;
-    // }
-
     private final String[] PUBLIC_ENDPOINTS = {
             "/login", "/terms", "/contact", "/privacy", "/signup", "/signup_success", "/api/**", "/blockchain/**"
-            // ,"/dashboard/getDepositDetails/**"
+            ,"/shopping","/shopping/**"
             ,"/directapi","/directapi/**"
             , "/css/**", "/js/**", "/images/**", "/api/**"
 
