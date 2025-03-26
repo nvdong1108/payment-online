@@ -1,7 +1,6 @@
 package com.demo.model;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
+import java.math.BigDecimal;
 
 import com.stripe.model.Product;
 
@@ -22,7 +21,13 @@ public class ProductCustomer extends Product {
         this.setDescription(product.getDescription());
         this.setImages(product.getImages());
         this.setName(product.getName());
+        this.setPrice(BigDecimal.ZERO);
+        this.setCurrency("");
+        this.setQuantity(1L);
+        
     }
-    String price;
+    BigDecimal price;
+    String currency;
+    Long quantity;
 
 }

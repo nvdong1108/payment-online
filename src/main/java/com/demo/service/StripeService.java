@@ -26,7 +26,7 @@ public class StripeService {
 
     String host = "http://localhost:8090";
 
-    public String payment() {
+    public String payment(String amount) {
         try {
             Stripe.apiKey = "sk_test_51QsFdSDs1SIogd7U7r9ojcBLR1IyDICMRFOjcWdGSqRXsmGtKd39KF5BosMPFrryQyIaU6WV4QddW8Cp0TFsBEG500T6xqRO9p";
 
@@ -65,7 +65,7 @@ public class StripeService {
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
                     .addLineItem(lineItem)
-                    .setSuccessUrl(host + "/success")
+                    .setSuccessUrl(host + "/shopping/payment-success")
                     .addPaymentMethodType(SessionCreateParams.PaymentMethodType.BANCONTACT)
                     .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                     .addPaymentMethodType(SessionCreateParams.PaymentMethodType.EPS)

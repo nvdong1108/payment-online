@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.common.CurrencyParser;
 import com.demo.common.StringUtil;
 import com.demo.entity.CustomUserDetails;
 import com.demo.entity.Deposits;
@@ -71,7 +72,8 @@ public class ApiPaymentController {
 	@PostMapping("/payment-link")
 	public ResponseEntity<?> getMethodName(@RequestBody Map<String, String> body) {
 		try {
-			String rederectUrl = stripeService.payment();
+			String amount = CurrencyParser.extractNumericValue(body.get(body.get("amount")));	
+			String rederectUrl = stripeService.payment(amount);
 			Map<String, Object> response = new HashMap<>();
 			response.put("redirectUrl", rederectUrl);
 
@@ -84,8 +86,6 @@ public class ApiPaymentController {
 
 	@PostMapping("/payment/checkout")
 	public ResponseEntity<?> processPayment(@RequestBody Map<String, String> request) {
-
-		stripeService.payment();
 
 		Map<String, Object> response = new HashMap<>();
 		Optional<Settings> settings = settingsRepository.findById(1L);

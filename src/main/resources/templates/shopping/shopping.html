@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-    
+
 <th:block th:replace="~{header/header :: head}"></th:block>
 
 <style>
@@ -92,18 +92,17 @@
 
         <!-- Product Grid -->
         <div class="row">
-            <!-- Product 6 - No Image -->
-            <div class="col-lg-4 col-md-6 col-6 mb-4" th:each="product : ${products}">
+            <div class="col-lg-3 col-md-6 col-6 mb-4" th:each="product : ${products}">
                 <div class="card product-card">
                     <a href="product-detail.html">
                         <div class="product-img-container">
-                            <!-- th:if="${product.images == null || product.images.size() == 0}" -->
-                            <div class="no-image" >
+
+                            <div class="no-image" th:if="${product.images == null || product.images.size() == 0}">
                                 <i class="bi bi-image"></i>
                             </div>
-                            <!-- <div class="product-img-container">
+                            <div class="product-img-container">
                                 <img th:src="${product.images.get(0)}" class="product-img" alt="Ergonomic Keyboard">
-                            </div> -->
+                            </div>
                         </div>
                     </a>
                     <div class="card-body">
@@ -111,7 +110,8 @@
                             <h5 class="product-title">[[${product.name}]]</h5>
                         </a>
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <!-- <span class="product-price">[[[${product.price}]]</span> -->
+                            <span class="product-price"
+                                th:attr="data-currency=${product.currency}">[[${product.price}]]</span>
                             <span class="badge bg-success">In Stock</span>
                         </div>
                         <button class="btn btn-primary btn-sm btn-add-to-cart">Add to Cart</button>
@@ -119,29 +119,14 @@
                 </div>
             </div>
         </div>
-
-        <!-- Pagination -->
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
     </div>
 
     <!-- Footer -->
 
     <th:block th:replace="~{header/header :: footer}"></th:block>
 
-    <!-- Bootstrap 5 JS Bundle with Popper -->
     
+
 </body>
 
 </html>
