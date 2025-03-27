@@ -131,7 +131,7 @@ public class ApiPaymentController {
 				map.put("toMail", user.getEmail());
 				map.put("amount", response.get("bill_amt"));
 				map.put("status", response.get("status"));
-				emailService.sendEmail(map);
+				emailService.sendEmailTransaction(map);
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 			}
