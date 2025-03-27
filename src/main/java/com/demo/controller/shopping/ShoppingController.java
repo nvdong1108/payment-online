@@ -2,7 +2,9 @@ package com.demo.controller.shopping;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,16 +62,18 @@ public class ShoppingController {
     public String getMethodName(Model model) {
 
         String orderId = "1234567890";
-        String orderDate = "1234567890";
-        String paymentMethod = "1234567890";
+        String orderDate = LocalDate.now().toString();
+        String paymentMethod = "Credit Card";
         BigDecimal totalAmount = new BigDecimal(1234567890);
         String customerEmail = "1234567890";
+        String currency = "euro";
 
         model.addAttribute("orderNumber", orderId);
         model.addAttribute("orderDate", orderDate);
         model.addAttribute("paymentMethod", paymentMethod);
         model.addAttribute("totalAmount", totalAmount);
         model.addAttribute("customerEmail", customerEmail);
+        model.addAttribute("currency",currency);
         return "/shopping/payment-success";
     }
 
